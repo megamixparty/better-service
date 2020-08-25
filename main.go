@@ -23,8 +23,10 @@ func main() {
 		middlewares.Database(api.GetDatabase()),
 		middlewares.Redis(api.GetRedis()),
 		middlewares.Authenticate,
+		middlewares.Logger,
 	)
 	r.Mount("/auth", auth.Routes())
 	r.Mount("/customer", customer.Routes())
+	log.Printf("Service is available at %s\n", ":8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
