@@ -20,10 +20,10 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(
+		middlewares.Logger,
 		middlewares.Database(api.GetDatabase()),
 		middlewares.Redis(api.GetRedis()),
 		middlewares.Authenticate,
-		middlewares.Logger,
 	)
 	r.Mount("/auth", auth.Routes())
 	r.Mount("/customer", customer.Routes())
