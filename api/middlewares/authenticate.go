@@ -1,15 +1,25 @@
 package middlewares
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 func Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		res := GetRedis(r.Context()).Get(r.Header.Get("token"))
-		if res.Err() != nil {
-			fmt.Fprintln(w, "Unauthorize. Please login!")
+		if r.URL.Path != "/auth/login" {
+			res := GetRedis(r.Context()).Get(r.Header.Get("token"))
+			if res.Err() != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				response := ErrorResponse{"Unauthorize. Please login!"}
+				b, _ := json.Marshal(response)
+				w.Write(b)
+				return
+			}
 		}
 		next.ServeHTTP(w, r)
 	})

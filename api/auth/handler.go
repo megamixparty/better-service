@@ -15,7 +15,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	res := LoginResponse{}
 	id, err := loginUser(middlewares.GetDB(r.Context()), u.User, u.Pass)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusUnauthorized)
 		res.Error = "Invalid user or password"
 		b, _ := json.Marshal(res)
 		w.Write(b)
