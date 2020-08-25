@@ -10,14 +10,14 @@ func CreateCustomer(db *sql.DB, req CustomerDetail) (id int, err error) {
 	if err != nil {
 		return 0, err
 	}
-	var cid int
-	err = tx.QueryRow("INSERT INTO customers (name, phone) VALUES ('" + req.Name + "', '" + req.Phone + "') RETURNING id").Scan(&cid)
+
+	err = tx.QueryRow("INSERT INTO customers (name, phone) VALUES ('" + req.Name + "', '" + req.Phone + "') RETURNING id").Scan(&id)
 	if err != nil {
 		return id, err
 	}
 
 	for _, addr := range req.Addresses {
-		_, err = tx.Exec("INSERT INTO customer_addresses (address, zipcode) VALUES ('" + addr.Address + "', '" + addr.ZipCode + "');")
+		_, err = tx.Exec("INSERT INTO customer_addresses (customer_id, address, zipcode) VALUES (" + strconv.Itoa(id) + ", '" + addr.Address + "', '" + addr.ZipCode + "');")
 		if err != nil {
 			return id, err
 		}
