@@ -11,6 +11,7 @@ import (
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	u := new(LoginRequest)
+	json.NewDecoder(r.Body).Decode(&u)
 	res := LoginResponse{}
 	id, err := loginUser(middlewares.GetDB(r.Context()), u.User, u.Pass)
 	if err != nil {
