@@ -4,9 +4,9 @@ import "github.com/go-chi/chi"
 
 func Routes() *chi.Mux {
 	r := chi.NewRouter()
-	r.Post("/create", createHandler)
-	r.Get("/get/{id}", getHandler)
-	r.Get("/list", listHandler)
-	r.Delete("/delete/{id}", deleteHandler)
+	r.Post("/", createHandler)
+	r.Get("/", listHandler)
+	r.Get("/{id}", getHandler)
+	r.Delete("/{id}", deleteHandler)
 	return r
 }

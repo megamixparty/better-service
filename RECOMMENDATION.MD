@@ -16,3 +16,5 @@ Logging ini diperlukan agar developer dapat mengetahui jika service yang dijalan
 7. ketika mengakses endpoint `/get/{id}` dan `/delete/{id}`, sistem perlu memberi balikan 404 jika record dengan id tersebut tidak ditemukan
 
 8. Menambahkan header `Content-Type` `application/json` untuk setiap response yang dikembalikan ke user
+
+9. Mengikuti salah satu kaidah RESTful API, penamaan url untuk resource customer tidak memerlukan nama CRUD function (get, create, delete), cukup gunakan HTTP Method sebagai pemisah fungsi. Selain itu, penamaan resource customer perlu menggunakan plural noun (customers)

@@ -27,7 +27,7 @@ func main() {
 		middlewares.Authenticate,
 	)
 	r.Mount("/auth", auth.Routes())
-	r.Mount("/customer", customer.Routes())
+	r.Mount("/customers", customer.Routes())
 	log.Printf("Service is available at %s\n", ":8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
