@@ -14,3 +14,5 @@ Logging ini diperlukan agar developer dapat mengetahui jika service yang dijalan
 6. Dalam proses penghapusan data di tabel `customers`, sistem perlu menghapus juga data di tabel `customer_addresses` dikarenakan customer_addresses memiliki hubungan dengan data di tabel `customers`
 
 7. ketika mengakses endpoint `/get/{id}` dan `/delete/{id}`, sistem perlu memberi balikan 404 jika record dengan id tersebut tidak ditemukan
+
+8. Menambahkan header `Content-Type` `application/json` untuk setiap response yang dikembalikan ke user

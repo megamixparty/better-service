@@ -21,6 +21,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(
 		middlewares.Logger,
+		middlewares.ResponseHeader,
 		middlewares.Database(api.GetDatabase()),
 		middlewares.Redis(api.GetRedis()),
 		middlewares.Authenticate,
