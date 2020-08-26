@@ -2,7 +2,6 @@ package customer
 
 import (
 	"database/sql"
-	"strconv"
 )
 
 func CreateCustomer(db *sql.DB, req CustomerDetail) (id int, err error) {
@@ -11,13 +10,13 @@ func CreateCustomer(db *sql.DB, req CustomerDetail) (id int, err error) {
 		return 0, err
 	}
 
-	err = tx.QueryRow("INSERT INTO customers (name, phone) VALUES ('" + req.Name + "', '" + req.Phone + "') RETURNING id").Scan(&id)
+	err = tx.QueryRow("INSERT INTO customers (name, phone) VALUES ($1, $2) RETURNING id", req.Name, req.Phone).Scan(&id)
 	if err != nil {
 		return id, err
 	}
 
 	for _, addr := range req.Addresses {
-		_, err = tx.Exec("INSERT INTO customer_addresses (customer_id, address, zipcode) VALUES (" + strconv.Itoa(id) + ", '" + addr.Address + "', '" + addr.ZipCode + "');")
+		_, err = tx.Exec("INSERT INTO customer_addresses (customer_id, address, zipcode) VALUES ($1, $2, $3)", id, addr.Address, addr.ZipCode)
 		if err != nil {
 			return id, err
 		}
@@ -29,12 +28,12 @@ func CreateCustomer(db *sql.DB, req CustomerDetail) (id int, err error) {
 
 func GetCustomer(db *sql.DB, id int) (cust CustomerDetail, err error) {
 	cust.ID = id
-	err = db.QueryRow("SELECT name, phone FROM customers WHERE id = "+strconv.Itoa(id)).Scan(&cust.Name, &cust.Phone)
+	err = db.QueryRow("SELECT name, phone FROM customers WHERE id = $1", id).Scan(&cust.Name, &cust.Phone)
 	if err != nil {
 		return
 	}
 
-	rows, err := db.Query("SELECT address, zipcode FROM customer_addresses WHERE customer_id = " + strconv.Itoa(id))
+	rows, err := db.Query("SELECT address, zipcode FROM customer_addresses WHERE customer_id = $1", id)
 	if err != nil {
 		return cust, err
 	}
@@ -65,12 +64,12 @@ func ListCustomer(db *sql.DB) (cs []ListResponse, err error) {
 }
 
 func DeleteCustomer(db *sql.DB, id int) error {
-	_, err := db.Exec("DELETE FROM customer_addresses WHERE customer_id = " + strconv.Itoa(id))
+	_, err := db.Exec("DELETE FROM customer_addresses WHERE customer_id = $1", id)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("DELETE FROM customers WHERE id = " + strconv.Itoa(id))
+	_, err = db.Exec("DELETE FROM customers WHERE id = $1", id)
 	if err != nil {
 		return err
 	}
