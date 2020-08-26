@@ -12,3 +12,5 @@ Logging ini diperlukan agar developer dapat mengetahui jika service yang dijalan
 5. Dalam proses penulisan ke tabel `customer_addresses`, sistem belum meletakkan value customer_id sehingga hubungan antara customers dan customer_addresses menjadi hilang. Selain itu, ada variable `cid` yang tidak diperlukan karena value id ketika melakukan insert ke tabel `customers` dapat langsung di-assign ke variable `id`
 
 6. Dalam proses penghapusan data di tabel `customers`, sistem perlu menghapus juga data di tabel `customer_addresses` dikarenakan customer_addresses memiliki hubungan dengan data di tabel `customers`
+
+7. ketika mengakses endpoint `/get/{id}` dan `/delete/{id}`, sistem perlu memberi balikan 404 jika record dengan id tersebut tidak ditemukan

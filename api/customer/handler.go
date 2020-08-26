@@ -1,6 +1,7 @@
 package customer
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -27,7 +28,11 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
 	res, err := GetCustomer(middlewares.GetDB(r.Context()), id)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		if err == sql.ErrNoRows {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
 		json.NewEncoder(w).Encode(ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -48,7 +53,13 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
-	err := DeleteCustomer(middlewares.GetDB(r.Context()), id)
+	_, err := GetCustomer(middlewares.GetDB(r.Context()), id)
+	if err == sql.ErrNoRows {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: err.Error()})
+		return
+	}
+	err = DeleteCustomer(middlewares.GetDB(r.Context()), id)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ErrorResponse{Error: err.Error()})
