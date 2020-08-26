@@ -65,7 +65,12 @@ func ListCustomer(db *sql.DB) (cs []ListResponse, err error) {
 }
 
 func DeleteCustomer(db *sql.DB, id int) error {
-	_, err := db.Exec("DELETE FROM customers WHERE id = " + strconv.Itoa(id))
+	_, err := db.Exec("DELETE FROM customer_addresses WHERE customer_id = " + strconv.Itoa(id))
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("DELETE FROM customers WHERE id = " + strconv.Itoa(id))
 	if err != nil {
 		return err
 	}
