@@ -3,6 +3,7 @@ package middlewares
 import (
 	"encoding/json"
 	"net/http"
+	"regexp"
 )
 
 type ErrorResponse struct {
@@ -11,7 +12,8 @@ type ErrorResponse struct {
 
 func Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/auth/login" {
+		matched, _ := regexp.MatchString(`auth.*`, r.URL.Path)
+		if !matched {
 			res := GetRedis(r.Context()).Get(r.Header.Get("token"))
 			if res.Err() != nil {
 				w.WriteHeader(http.StatusUnauthorized)

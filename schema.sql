@@ -1,11 +1,11 @@
 CREATE TABLE administrators (
-    id int,
-    username varchar(200),
+    id serial,
+    username varchar(200) unique,
     password varchar(200)
 );
-
+/*password value for this hash is 'admin'*/
 INSERT INTO administrators (id, username, password) VALUES
-(1, 'admin', 'admin');
+(1, 'admin', '$2a$04$hadDO4xaxSdMb7kf34PvyuzYVNGFLXO4synZ94Kf8g5kgMQCHPfBC');
 
 CREATE TABLE customers (
     id serial primary key,

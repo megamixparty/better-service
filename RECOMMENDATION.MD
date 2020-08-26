@@ -20,3 +20,5 @@ Logging ini diperlukan agar developer dapat mengetahui jika service yang dijalan
 9. Mengikuti salah satu kaidah RESTful API, penamaan url untuk resource customer tidak memerlukan nama CRUD function (get, create, delete), cukup gunakan HTTP Method sebagai pemisah fungsi. Selain itu, penamaan resource customer perlu menggunakan plural noun (customers)
 
 10. Mencegah terjadinya SQL injection dengan menggunakan argument placeholder yang disediakan oleh package `database/sql`
+
+11. Mengimplementasikan enkripsi satu arah dalam penyimpanan password administrator. Dalam poin ini, akan diimplementasikan a) sistem untuk register administrator, b) password hashing dengan menggunakan bcrypt, c) penambahan index unique pada tabel `administrator` kolom `username`, d) membuat struct RegisterRequest dan RegisterResponse, e) Mengubah cara komparasi password dengan menggunakan bcrypt, f) meloloskan semua path yang mengandung `auth` dari validasi token
