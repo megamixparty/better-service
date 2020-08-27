@@ -22,3 +22,5 @@ Logging ini diperlukan agar developer dapat mengetahui jika service yang dijalan
 10. Mencegah terjadinya SQL injection dengan menggunakan argument placeholder yang disediakan oleh package `database/sql`
 
 11. Mengimplementasikan enkripsi satu arah dalam penyimpanan password administrator. Dalam poin ini, akan diimplementasikan a) sistem untuk register administrator, b) password hashing dengan menggunakan bcrypt, c) penambahan index unique pada tabel `administrator` kolom `username`, d) membuat struct RegisterRequest dan RegisterResponse, e) Mengubah cara komparasi password dengan menggunakan bcrypt, f) meloloskan semua path yang mengandung `auth` dari validasi token
+
+12. Menerapkan pagination pada endpoint index customers. Pagination diletakkan di Header response. Batasi jumlah data yang bisa diambil sebanyak maksimal 50

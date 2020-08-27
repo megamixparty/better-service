@@ -47,8 +47,13 @@ func GetCustomer(db *sql.DB, id int) (cust CustomerDetail, err error) {
 	return
 }
 
-func ListCustomer(db *sql.DB) (cs []ListResponse, err error) {
-	rows, err := db.Query("SELECT id, name FROM customers")
+func ListCustomer(db *sql.DB, cp *CustomerPagination) (cs []ListResponse, err error) {
+	rows, err := db.Query("SELECT id, name FROM customers ORDER BY id OFFSET $1 LIMIT $2", cp.Offset, cp.Limit)
+	if err != nil {
+		return cs, err
+	}
+
+	err = db.QueryRow("SELECT COUNT(*) FROM customers").Scan(&cp.Total)
 	if err != nil {
 		return cs, err
 	}

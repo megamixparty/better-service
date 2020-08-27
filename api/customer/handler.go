@@ -41,12 +41,30 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func listHandler(w http.ResponseWriter, r *http.Request) {
-	res, err := ListCustomer(middlewares.GetDB(r.Context()))
+	var cp CustomerPagination
+
+	cp.Offset, _ = strconv.Atoi(r.URL.Query().Get("offset"))
+	cp.Limit, _ = strconv.Atoi(r.URL.Query().Get("limit"))
+
+	if cp.Offset < 0 {
+		cp.Offset = 0
+	}
+
+	if cp.Limit <= 0 {
+		cp.Limit = 10
+	} else if cp.Limit > 50 {
+		cp.Limit = 50
+	}
+
+	res, err := ListCustomer(middlewares.GetDB(r.Context()), &cp)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ErrorResponse{Error: err.Error()})
 		return
 	}
+	w.Header().Set("Pagination-Offset", strconv.Itoa(cp.Offset))
+	w.Header().Set("Pagination-Limit", strconv.Itoa(cp.Limit))
+	w.Header().Set("Pagination-Total", strconv.Itoa(cp.Total))
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(res)
 }

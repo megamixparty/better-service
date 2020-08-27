@@ -24,3 +24,9 @@ type ListResponse struct {
 type ErrorResponse struct {
 	Error string `json:"error"`
 }
+
+type CustomerPagination struct {
+	Offset int
+	Limit  int
+	Total  int
+}
